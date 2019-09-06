@@ -34,6 +34,12 @@ Texture::Texture(RenderContext& context, const Bitmap& bitmap,
 		: Texture(context, bitmap.getWidth(), bitmap.getHeight(),
 			   internalPixelFormat, false, bitmap.getPixels())	{}
 
+Texture::Texture(RenderContext& context, const HDRBitmap& bitmap,
+			uint32 internalPixelFormat)
+		: Texture(context, bitmap.getWidth(), bitmap.getHeight(),
+				internalPixelFormat, false, bitmap.getData(),
+				GL_RGB, GL_FLOAT) {}
+
 Texture::~Texture() {
 	glDeleteTextures(1, &textureID);
 }

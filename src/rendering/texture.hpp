@@ -1,7 +1,9 @@
 #pragma once
 
 #include "render-context.hpp"
+
 #include "bitmap.hpp"
+#include "hdr-bitmap.hpp"
 
 class Texture {
 	public:
@@ -11,6 +13,8 @@ class Texture {
 				uint32 pixelFormat = GL_RGBA,
 				uint32 dataType = GL_UNSIGNED_BYTE);
 		Texture(RenderContext& context, const Bitmap& bitmap,
+				uint32 internalPixelFormat);
+		Texture(RenderContext& context, const HDRBitmap& bitmap,
 				uint32 internalPixelFormat);
 
 		inline uint32 getID() { return textureID; }
