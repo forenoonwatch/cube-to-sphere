@@ -23,8 +23,12 @@ void HDRBitmap::clear() {
 bool HDRBitmap::load(const std::string& fileName) {
 	int32 texWidth, texHeight, numComponents;
 
+	stbi_set_flip_vertically_on_load(true);
+
 	float* fileData = stbi_loadf(fileName.c_str(), &texWidth,
 			&texHeight, &numComponents, 0);
+
+	stbi_set_flip_vertically_on_load(false);
 
 	if (data == nullptr) {
 		DEBUG_LOG(LOG_ERROR, "HDR Bitmap Load",
