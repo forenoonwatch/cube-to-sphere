@@ -8,7 +8,7 @@
 
 #include <cstring>
 
-#define NUM_CHANNELS 4
+#define NUM_CHANNELS 3
 
 Bitmap::Bitmap(int32 width, int32 height)
 		: width(width)
@@ -24,7 +24,7 @@ Bitmap::Bitmap(int32 width, int32 height, int32* inPixels)
 
 Bitmap::Bitmap(Texture& texture)
 		: Bitmap(texture.getWidth(), texture.getHeight()) {
-	glGetTextureImage(texture.getID(), 0, GL_RGBA, GL_UNSIGNED_INT,
+	glGetTextureImage(texture.getID(), 0, GL_RGB, GL_UNSIGNED_BYTE,
 			calcPixelsSize(), pixels);
 }
 
@@ -58,6 +58,21 @@ bool Bitmap::load(const std::string& fileName) {
 	return true;
 }
 
+bool Bitmap::load(Texture& texture) {
+	if (width != texture.getWidth() || height != texture.getHeight()) {
+		width = texture.getWidth();
+		height = texture.getHeight();
+
+		delete[] pixels;
+		pixels = new int32[width * height];
+	}
+
+	glGetTextureImage(texture.getID(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+			calcPixelsSize(), pixels);
+
+	return true;
+}
+
 bool Bitmap::save(const std::string& fileName) {
 	std::string ext = Util::getFileExtension(fileName);
 
@@ -69,7 +84,7 @@ bool Bitmap::save(const std::string& fileName) {
 	}
 
 	bool res = stbi_write_png(fileName.c_str(), width, height,
-			NUM_CHANNELS, pixels, sizeof(int32));
+			NUM_CHANNELS, pixels, NUM_CHANNELS * width);
 
 	if (!res) {
 		DEBUG_LOG(LOG_ERROR, "Bitmap Save",
