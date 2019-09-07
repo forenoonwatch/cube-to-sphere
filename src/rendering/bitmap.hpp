@@ -12,6 +12,7 @@ class Bitmap {
 		void clear();
 
 		bool load(const std::string& fileName);
+		bool save(const std::string& fileName);
 
 		inline void set(int32 x, int32 y, int32 abgr);
 
