@@ -4,10 +4,13 @@
 
 #include <string>
 
+class Texture;
+
 class HDRBitmap {
 	public:
 		HDRBitmap(int32 width = 1, int32 height = 1);
 		HDRBitmap(int32 width, int32 height, float* data);
+		HDRBitmap(Texture& texture);
 		
 		void clear();
 

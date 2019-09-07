@@ -1,5 +1,7 @@
 #include "hdr-bitmap.hpp"
 
+#include "texture.hpp"
+
 #include "stbi/stb_image.h"
 #include "stbi/stb_image_write.h"
 
@@ -17,6 +19,12 @@ HDRBitmap::HDRBitmap(int32 width, int32 height, float* inData)
 		, height(height)
 		, data(new float[NUM_CHANNELS * width * height]) {
 	std::memcpy(data, inData, calcDataSize());
+}
+
+HDRBitmap::HDRBitmap(Texture& texture)
+		: HDRBitmap(texture.getWidth(), texture.getHeight()) {
+	glGetTextureImage(texture.getID(), 0, GL_RGB, GL_FLOAT,
+			calcDataSize(), data);
 }
 
 void HDRBitmap::clear() {
@@ -54,8 +62,14 @@ bool HDRBitmap::load(const std::string& fileName) {
 }
 
 bool HDRBitmap::save(const std::string& fileName) {
-	return stbi_write_hdr(fileName.c_str(), width, height,
+	stbi_flip_vertically_on_write(true);
+
+	bool res = stbi_write_hdr(fileName.c_str(), width, height,
 			NUM_CHANNELS, data);
+
+	stbi_flip_vertically_on_write(false);
+
+	return res;
 }
 
 HDRBitmap::~HDRBitmap() {
