@@ -1,5 +1,6 @@
 #include "bitmap.hpp"
 
+#include "texture.hpp"
 #include "util.hpp"
 
 #include "stbi/stb_image.h"
@@ -19,6 +20,12 @@ Bitmap::Bitmap(int32 width, int32 height, int32* inPixels)
 		, height(height)
 		, pixels(new int32[width * height]) {
 	std::memcpy(pixels, inPixels, calcPixelsSize());
+}
+
+Bitmap::Bitmap(Texture& texture)
+		: Bitmap(texture.getWidth(), texture.getHeight()) {
+	glGetTextureImage(texture.getID(), 0, GL_RGBA, GL_UNSIGNED_INT,
+			calcPixelsSize(), pixels);
 }
 
 void Bitmap::clear() {

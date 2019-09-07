@@ -4,10 +4,13 @@
 
 #include <string>
 
+class Texture;
+
 class Bitmap {
 	public:
 		Bitmap(int32 width = 1, int32 height = 1);
 		Bitmap(int32 width, int32 height, int32* pixels);
+		Bitmap(Texture& texture);
 
 		void clear();
 
