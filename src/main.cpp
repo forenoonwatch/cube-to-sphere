@@ -20,7 +20,7 @@ void initSkyboxCube(IndexedModel&);
 
 int main() {
 	HDRBitmap bmp;
-	bmp.load("./res/Alexs_Apt_Env.hdr");
+	bmp.load("./res/Alexs_Apt_2k.hdr");
 
 	float aspectRatio = (float)bmp.getWidth() / (float)bmp.getHeight();
 
@@ -57,6 +57,10 @@ int main() {
 	Util::resolveFileLinking(ss, "./src/skybox-shader.glsl", "#include");
 	Shader skyboxShader(context, ss.str());
 
+	ss.str("");
+	Util::resolveFileLinking(ss, "./src/sphere-skybox.glsl", "#include");
+	Shader sphereSkyboxShader(context, ss.str());
+
 	RenderTarget screen(context, display.getWidth(), display.getHeight());
 
 	Camera camera(glm::radians(70.f), aspectRatio, 0.1f, 100.f);
@@ -66,10 +70,17 @@ int main() {
 	while (!display.isCloseRequested()) {
 		screen.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		camera.rotate(0.f, 0.005f);
+
 		camera.update();
 
 		skyboxCube.updateBuffer(1, glm::value_ptr(camera.getViewProjection()), sizeof(glm::mat4));
-		context.draw(screen, skyboxShader, skyboxCube, GL_TRIANGLES);
+
+		//skyboxShader.setSampler("skybox", skybox, sampler, 0);
+		//context.draw(screen, skyboxShader, skyboxCube, GL_TRIANGLES);
+
+		sphereSkyboxShader.setSampler("skybox", texture, sampler, 0);
+		context.draw(screen, sphereSkyboxShader, skyboxCube, GL_TRIANGLES);
 
 		//quadShader.setSampler("img", texture, sampler, 0);
 		//context.draw(screen, quadShader, quad, GL_TRIANGLES);
