@@ -1,18 +1,21 @@
 #include "hdr-bitmap.hpp"
 
 #include "stbi/stb_image.h"
+#include "stbi/stb_image_write.h"
 
 #include <cstring>
+
+#define NUM_CHANNELS 3
 
 HDRBitmap::HDRBitmap(int32 width, int32 height)
 		: width(width)
 		, height(height)
-		, data(new float[3 * width * height]) {}
+		, data(new float[NUM_CHANNELS * width * height]) {}
 
 HDRBitmap::HDRBitmap(int32 width, int32 height, float* inData)
 		: width(width)
 		, height(height)
-		, data(new float[3 * width * height]) {
+		, data(new float[NUM_CHANNELS * width * height]) {
 	std::memcpy(data, inData, calcDataSize());
 }
 
@@ -41,7 +44,7 @@ bool HDRBitmap::load(const std::string& fileName) {
 		height = texHeight;
 
 		delete[] data;
-		data = new float[3 * width * height];
+		data = new float[NUM_CHANNELS * width * height];
 	}
 
 	std::memcpy(data, fileData, calcDataSize());
@@ -50,10 +53,15 @@ bool HDRBitmap::load(const std::string& fileName) {
 	return true;
 }
 
+bool HDRBitmap::save(const std::string& fileName) {
+	return stbi_write_hdr(fileName.c_str(), width, height,
+			NUM_CHANNELS, data);
+}
+
 HDRBitmap::~HDRBitmap() {
 	delete[] data;
 }
 
 inline uintptr HDRBitmap::calcDataSize() const {
-	return (uintptr)(3 * width * height) * sizeof(float);
+	return (uintptr)(NUM_CHANNELS * width * height) * sizeof(float);
 }

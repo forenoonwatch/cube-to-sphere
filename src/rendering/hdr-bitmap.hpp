@@ -12,6 +12,7 @@ class HDRBitmap {
 		void clear();
 
 		bool load(const std::string& fileName);
+		bool save(const std::string& fileName);
 
 		inline int32 getWidth() const { return width; }
 		inline int32 getHeight() const { return height; }
