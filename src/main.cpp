@@ -26,11 +26,13 @@ void cubeToSphere(RenderContext& context, CubeMap& cubeMap,
 int main() {
 	HDRBitmap bmp;
 	//bmp.load("./res/Alexs_Apt_2k.hdr");
-	bmp.load("./test.hdr");
+	bmp.load("./res/hdr-generated.hdr");
 
 	//Bitmap pngBMP;
 	
 	//bmp.save("./test.hdr");
+
+	//DEBUG_LOG_TEMP("%d, %d", bmp.getWidth(), bmp.getHeight());
 
 	float aspectRatio = (float)bmp.getWidth() / (float)bmp.getHeight();
 
@@ -52,6 +54,9 @@ int main() {
 		"./res/skybox/back.jpg"};
 
 	CubeMap skybox(context, cubeTextures);
+
+	//cubeToSphere(context, skybox, bmp.getWidth(), bmp.getHeight(),
+	//		"./res/hdr-generated.hdr");
 
 	Sampler sampler(context, GL_LINEAR, GL_LINEAR);
 
@@ -227,4 +232,26 @@ void sphereToCube(RenderContext& context, Texture& sphereMap,
 		bmp.load(buffer);
 		bmp.save(textureFolder + "/" + sides[i] + ".png");
 	}
+}
+
+void cubeToSphere(RenderContext& context, CubeMap& cubeMap,
+		uint32 texWidth, uint32 texHeight, const std::string& fileName) {
+	Texture buffer(context, texWidth, texHeight, GL_RGBA32F);
+	RenderTarget target(context, buffer, GL_COLOR_ATTACHMENT0);
+
+	Sampler sampler(context, GL_LINEAR, GL_LINEAR);
+
+	std::stringstream ss;
+	Util::resolveFileLinking(ss, "./src/cube-to-sphere.glsl", "#include");
+	Shader shader(context, ss.str());
+
+	HDRBitmap bmp;
+
+	glViewport(0, 0, texWidth, texHeight);
+
+	shader.setSampler("skybox", cubeMap, sampler, 0);
+	context.drawQuad(target, shader);
+
+	bmp.load(buffer);
+	bmp.save(fileName);
 }
