@@ -13,7 +13,7 @@
 #include "rendering/vertex-array.hpp"
 #include "rendering/shader.hpp"
 
-#include "rendering/util.hpp"
+#include "util.hpp"
 
 // initializes an IndexedModel to contain an inverted cube
 void initSkyboxCube(IndexedModel&);
@@ -75,7 +75,7 @@ void cubeToSphere(RenderContext& context, CubeMap& cubeMap,
 	Sampler sampler(context, GL_LINEAR, GL_LINEAR);
 
 	std::stringstream ss;
-	Util::resolveFileLinking(ss, "./src/cube-to-sphere.glsl", "#include");
+	Util::resolveFileLinking(ss, "./src/shaders/cube-to-sphere.glsl", "#include");
 	Shader shader(context, ss.str());
 
 	HDRBitmap bmp;
@@ -97,7 +97,7 @@ void sphereToCube(RenderContext& context, Texture& sphereMap,
 	Sampler sampler(context, GL_LINEAR, GL_LINEAR);
 
 	std::stringstream ss;
-	Util::resolveFileLinking(ss, "./src/sphere-skybox.glsl", "#include");
+	Util::resolveFileLinking(ss, "./src/shaders/sphere-skybox.glsl", "#include");
 	Shader shader(context, ss.str());
 
 	IndexedModel cubeModel;
