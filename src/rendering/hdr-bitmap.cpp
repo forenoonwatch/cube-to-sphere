@@ -61,6 +61,21 @@ bool HDRBitmap::load(const std::string& fileName) {
 	return true;
 }
 
+bool HDRBitmap::load(Texture& texture) {
+	if (width != texture.getWidth() || height != texture.getHeight()) {
+		width = texture.getWidth();
+		height = texture.getHeight();
+
+		delete[] data;
+		data = new float[NUM_CHANNELS * width * height];
+	}
+
+	glGetTextureImage(texture.getID(), 0, GL_RGB, GL_FLOAT,
+			calcDataSize(), data);
+
+	return true;
+}
+
 bool HDRBitmap::save(const std::string& fileName) {
 	stbi_flip_vertically_on_write(true);
 
