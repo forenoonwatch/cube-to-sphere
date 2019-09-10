@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 	uint32 width = std::atoi(argv[4]);
 	uint32 height = std::atoi(argv[5]);
 
-	Display display("Cube Map to Sphere Map", 100, 100);
+	Display display("Cube Map to Sphere Map", 100, 100, false);
 	RenderContext context;
 
 	std::string sides[] = {"right", "left", "top", "bottom", "front", "back"};

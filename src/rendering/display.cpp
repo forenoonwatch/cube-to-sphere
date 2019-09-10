@@ -5,7 +5,8 @@
 
 uint32 Display::numInstances = 0;
 
-Display::Display(const char* title, uint32 width, uint32 height)
+Display::Display(const char* title, uint32 width, uint32 height,
+			bool visible)
 		: window(nullptr)
 		, width(width)
 		, height(height) {
@@ -14,6 +15,7 @@ Display::Display(const char* title, uint32 width, uint32 height)
 	}
 	
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	glfwWindowHint(GLFW_VISIBLE, visible);
 
 	window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 	glfwMakeContextCurrent(window);
