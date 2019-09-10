@@ -1,7 +1,8 @@
 #include "bitmap.hpp"
 
 #include "texture.hpp"
-#include "util.hpp"
+
+#include "core/util.hpp"
 
 #include "stbi/stb_image.h"
 #include "stbi/stb_image_write.h"

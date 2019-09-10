@@ -13,7 +13,7 @@
 #include "rendering/vertex-array.hpp"
 #include "rendering/shader.hpp"
 
-#include "util.hpp"
+#include "core/util.hpp"
 
 // initializes an IndexedModel to contain an inverted cube
 void initSkyboxCube(IndexedModel&);
